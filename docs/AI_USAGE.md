@@ -28,6 +28,15 @@ This solution was built with **Claude Code** (an agentic coding tool) as a pair 
 | 1.2 MB initial JS bundle | Build output warning | Lazy-loaded the insights page (charts split into their own chunk) |
 | A sort on raw salary would rank ₹3,000,000 above $200,000 | Designed for up front, then pinned by a test | Sort by USD equivalent |
 
+## UI migration to shadcn/ui
+
+Prompt: *"Improve the UI with clean shadcn, using shadcn components."*
+
+- Components were generated with the shadcn CLI (not hand-written from memory), then the pages were rewritten on top of them.
+- The generated `cn` helper import was checked before trusting it: it resolves to `shadcn-ui/cn`, the shadcn project's own package.
+- Checked in the browser at desktop and mobile widths, light and dark. Fixes found that way: a header separator stretched to the top of the bar, timeline dots 1.4px off the line (measured in the DOM), and the salary column scrolled off-screen on phones (job title now folds under the name below `sm`).
+- Unused generated components (pagination, tabs, dropdown-menu) were removed.
+
 ## Guardrails used
 
 - Every behaviour has a fast test against a real in-memory SQLite DB; no mocks of the database.

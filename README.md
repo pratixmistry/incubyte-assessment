@@ -20,7 +20,7 @@ Web app for ACME's HR Manager to **manage salary data for 10,000 employees acros
 | | |
 |---|---|
 | Backend | Node.js 24, TypeScript, Express 5, zod, SQLite via built-in `node:sqlite` |
-| Frontend | React 19, Vite, Mantine (components + charts), TanStack React Query, React Router |
+| Frontend | React 19, Vite, Tailwind CSS v4, shadcn/ui (Radix primitives, recharts charts), TanStack React Query, React Router |
 | Tests | Vitest, Supertest, Testing Library |
 | Delivery | Single Docker image (API serves the built UI), Render blueprint, GitHub Actions CI |
 
@@ -67,7 +67,7 @@ Serves the API and the built UI together on http://localhost:3001.
 npm test
 ```
 
-Runs 92 tests (72 server, 20 client) in a few seconds. Server tests use a fresh in-memory SQLite database per test and a fixed clock — no mocks of the database, no network, no shared state.
+Runs 98 tests (72 server, 26 client) in a few seconds. Server tests use a fresh in-memory SQLite database per test and a fixed clock — no mocks of the database, no network, no shared state.
 
 | Suite | Covers |
 |---|---|
@@ -75,7 +75,7 @@ Runs 92 tests (72 server, 20 client) in a few seconds. Server tests use a fresh 
 | `server/test/seed` | Seed is deterministic, valid per API schema, unique emails, consistent salary history, realistic pay levels |
 | `server/test/services` | Salary history rules, duplicate emails, search/filter/sort/paginate, insights currency rules |
 | `server/test/http` | Status codes, validation error shape, input normalisation, routing |
-| `client/src/**/*.test.ts(x)` | Formatting, URL ↔ filter state, employee form validation and server-error display |
+| `client/src/**/*.test.ts(x)` | Formatting, URL ↔ filter state, salary input parsing, form validation and server-error display |
 
 ## Configuration
 
@@ -106,7 +106,7 @@ docker run -p 3001:3001 -v salary-data:/data salary-manager
 ```
 client/                React SPA
   src/api/             fetch client, React Query hooks, DTO types
-  src/components/      Layout, EmployeeForm, EmployeeDrawer
+  src/components/      Layout, EmployeeForm, EmployeeDrawer, Combobox (+ ui/ = shadcn primitives)
   src/pages/           EmployeesPage, InsightsPage
   src/lib/             formatting, URL query state, validation (pure, tested)
 server/

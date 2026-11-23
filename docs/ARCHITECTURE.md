@@ -5,7 +5,7 @@
 ```mermaid
 flowchart LR
   subgraph Browser
-    UI["React SPA<br/>Mantine · React Query · React Router"]
+    UI["React SPA<br/>shadcn/ui + Tailwind · React Query · React Router"]
   end
   subgraph "Node.js process (single deployable)"
     Static["Static files<br/>(built SPA)"]

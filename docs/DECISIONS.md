@@ -2,7 +2,7 @@
 
 Each entry: what was decided, why, and what we gave up.
 
-## 1. Stack: Node + TypeScript, Express, SQLite, React + Mantine
+## 1. Stack: Node + TypeScript, Express, SQLite, React + shadcn/ui
 - **Why:** one language end to end; types shared conceptually between API DTOs and the client; SQLite is the brief's suggestion and is more than enough for 10k rows.
 - **Gave up:** a multi-user production database. The repository layer is the only place with SQL, so moving to Postgres is contained (the only SQLite-specific bits are `COLLATE NOCASE` and the driver API).
 
@@ -44,6 +44,13 @@ Each entry: what was decided, why, and what we gave up.
 
 ## 10. One deployable unit
 - Express serves the built SPA and the API from the same origin: no CORS, one URL, one health check. Docker image runs as a non-root user; on hosts with ephemeral disks the server seeds itself when the DB is empty.
+
+## 11. UI built on shadcn/ui (replacing an initial Mantine version)
+- The first UI used Mantine for speed. It was rebuilt on **shadcn/ui + Tailwind CSS v4** for a cleaner, more neutral look and because shadcn components are copied into the repo (`client/src/components/ui`), so they can be read, reviewed and adjusted like our own code rather than configured through a large library API.
+- Radix primitives give accessible dialogs, sheets, selects and focus handling; charts use shadcn's `ChartContainer` over recharts, themed from the same CSS variables as the rest of the UI (light/dark).
+- Small app-specific pieces were composed from primitives rather than adding libraries: a searchable `Combobox` (Popover + Command) that also accepts a new job title, and a data-table toolbar/pagination.
+- Chart animations are off: numbers should appear immediately when filters change, which suits an analysis tool.
+- **Trade-off:** more component code lives in the repo (~25 files under `ui/`). Unused generated components were deleted.
 
 ## Known limitations / next steps
 1. **Authentication & authorisation** (company SSO) — required before real data.
