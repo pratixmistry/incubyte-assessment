@@ -5,6 +5,6 @@ export const config = {
   dbPath: process.env.DB_PATH ?? resolve(process.cwd(), 'data', 'salary.db'),
   /** Seed 10k employees on boot when the database is empty (handy on ephemeral hosts). */
   seedOnEmpty: process.env.SEED_ON_EMPTY !== 'false',
-  /** Directory of the built React app to serve; unset in development (Vite serves it). */
-  clientDist: process.env.CLIENT_DIST,
+  /** Built React app served from the same origin when present (production); Vite serves it in development. */
+  clientDist: process.env.CLIENT_DIST ?? resolve(process.cwd(), '..', 'client', 'dist'),
 };
