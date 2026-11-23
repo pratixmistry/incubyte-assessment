@@ -9,22 +9,37 @@ export interface EmployeeFormValues {
   jobTitle: string;
   department: string;
   countryCode: string;
-  salary: number | string; // NumberInput yields '' when empty
+  /** As typed, e.g. "1,250,000"; parsed with parseSalary. */
+  salary: string;
   hireDate: string;
 }
+
+export type EmployeeFormErrors = Partial<Record<keyof EmployeeFormValues, string>>;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 
-export function validateEmployeeForm(values: EmployeeFormValues): Partial<Record<keyof EmployeeFormValues, string>> {
-  const errors: Partial<Record<keyof EmployeeFormValues, string>> = {};
+/** "1,250,000" → 1250000; "" → NaN. Accepts thousands separators and spaces. */
+export function parseSalary(input: string): number {
+  const cleaned = input.replace(/[,\s]/g, '');
+  return cleaned === '' ? Number.NaN : Number(cleaned);
+}
+
+/** Formats digits as they're typed: "1250000" → "1,250,000". Non-digits are dropped. */
+export function formatSalaryInput(input: string): string {
+  const digits = input.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
+  return digits ? Number(digits).toLocaleString('en-US') : '';
+}
+
+export function validateEmployeeForm(values: EmployeeFormValues): EmployeeFormErrors {
+  const errors: EmployeeFormErrors = {};
   if (!values.fullName.trim()) errors.fullName = 'Full name is required';
   if (!EMAIL_PATTERN.test(values.email.trim())) errors.email = 'Enter a valid email address';
   if (!values.jobTitle.trim()) errors.jobTitle = 'Job title is required';
   if (!values.department) errors.department = 'Choose a department';
   if (!values.countryCode) errors.countryCode = 'Choose a country';
 
-  const salary = typeof values.salary === 'number' ? values.salary : Number.NaN;
+  const salary = parseSalary(values.salary);
   if (!Number.isFinite(salary)) errors.salary = 'Salary is required';
   else if (salary <= 0) errors.salary = 'Salary must be greater than zero';
   else if (!Number.isInteger(salary)) errors.salary = 'Salary must be a whole number';

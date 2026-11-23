@@ -1,4 +1,4 @@
-import { Center, Loader } from '@mantine/core';
+import { Loader2 } from 'lucide-react';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router';
 import { Layout } from './components/Layout';
@@ -8,9 +8,9 @@ import { EmployeesPage } from './pages/EmployeesPage';
 const InsightsPage = lazy(() => import('./pages/InsightsPage').then((m) => ({ default: m.InsightsPage })));
 
 const pageLoader = (
-  <Center py="xl">
-    <Loader />
-  </Center>
+  <div className="flex justify-center py-16 text-muted-foreground">
+    <Loader2 className="size-6 animate-spin" />
+  </div>
 );
 
 export const router = createBrowserRouter([
