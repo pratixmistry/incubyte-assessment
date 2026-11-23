@@ -1,4 +1,4 @@
-import { ActionIcon, AppShell, Burger, Group, NavLink, Text, ThemeIcon, Title, useMantineColorScheme } from '@mantine/core';
+import { ActionIcon, AppShell, Burger, Group, NavLink, Text, ThemeIcon, Title, useComputedColorScheme, useMantineColorScheme } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconChartBar, IconCoin, IconMoon, IconSun, IconUsers } from '@tabler/icons-react';
 import { NavLink as RouterNavLink, Outlet, useLocation } from 'react-router';
@@ -11,7 +11,8 @@ const NAV = [
 export function Layout() {
   const [opened, { toggle, close }] = useDisclosure();
   const { pathname } = useLocation();
-  const { toggleColorScheme } = useMantineColorScheme();
+  const { setColorScheme } = useMantineColorScheme();
+  const isDark = useComputedColorScheme('light') === 'dark';
 
   return (
     <AppShell
@@ -35,9 +36,13 @@ export function Layout() {
               </Text>
             </div>
           </Group>
-          <ActionIcon variant="default" size="lg" onClick={toggleColorScheme} aria-label="Toggle color scheme">
-            <IconSun size={18} className="light-hidden" />
-            <IconMoon size={18} className="dark-hidden" />
+          <ActionIcon
+            variant="default"
+            size="lg"
+            onClick={() => setColorScheme(isDark ? 'light' : 'dark')}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {isDark ? <IconSun size={18} /> : <IconMoon size={18} />}
           </ActionIcon>
         </Group>
       </AppShell.Header>
