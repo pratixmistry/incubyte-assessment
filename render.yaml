@@ -1,0 +1,12 @@
+# Render Blueprint: https://render.com/docs/blueprint-spec
+# Free plan disks are ephemeral, so the server seeds 10,000 employees on boot
+# when the database is empty. Attach a persistent disk at /data to keep edits.
+services:
+  - type: web
+    name: salary-management
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      - key: SEED_ON_EMPTY
+        value: "true"
